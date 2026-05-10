@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#16070f" />
+    <title>妈妈，母亲节快乐</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <main class="experience" aria-live="polite">
+      <canvas id="ritual-canvas" aria-hidden="true"></canvas>
+
+      <section class="scene scene-0 is-active" data-scene="0">
+        <div class="scene-copy scene-copy--center">
+          <p class="eyebrow">Mother's Day</p>
+          <h1>妈妈，今天有一束光想送给你</h1>
+        </div>
+        <button class="hotspot hotspot--bud" type="button" aria-label="打开这束光">
+          <span></span>
+        </button>
+      </section>
+
+      <section class="scene scene-1" data-scene="1">
+        <div class="scene-copy scene-copy--low">
+          <h2>谢谢你，把爱藏在每一天里。</h2>
+        </div>
+      </section>
+
+      <section class="scene scene-2" data-scene="2">
+        <div class="scene-copy scene-copy--upper">
+          <h2>有些温柔，从不声张。</h2>
+        </div>
+      </section>
+
+      <section class="scene scene-3" data-scene="3">
+        <div class="scene-copy scene-copy--low">
+          <h2>愿你被世界温柔以待。</h2>
+        </div>
+      </section>
+
+      <section class="scene scene-4" data-scene="4">
+        <button class="seed-button" type="button" aria-label="绽放母亲节祝福">
+          <span class="seed-core"></span>
+        </button>
+        <p class="balloon-hint">戳开这个气球</p>
+        <div class="final-copy">
+          <p>愿妈妈永远被爱环绕</p>
+          <h2>母亲节快乐</h2>
+        </div>
+        <button class="replay-button" type="button">再看一次</button>
+      </section>
+
+      <nav class="scene-nav" aria-label="场景导航">
+        <button type="button" class="is-active" data-target="0" aria-label="第 1 屏"></button>
+        <button type="button" data-target="1" aria-label="第 2 屏"></button>
+        <button type="button" data-target="2" aria-label="第 3 屏"></button>
+        <button type="button" data-target="3" aria-label="第 4 屏"></button>
+        <button type="button" data-target="4" aria-label="第 5 屏"></button>
+      </nav>
+
+      <button class="advance-cue" type="button" aria-label="进入下一屏">
+        <span></span>
+      </button>
+    </main>
+  </body>
+</html>
