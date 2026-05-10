@@ -7,5 +7,3 @@
 - `index.html`
 - `styles.css`
 - `script.js`
-
-本地预览截图文件不需要上传到 GitHub Pages。
