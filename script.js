@@ -7,6 +7,8 @@
   const seedButton = document.querySelector(".seed-button");
   const replayButton = document.querySelector(".replay-button");
   const advanceCue = document.querySelector(".advance-cue");
+  const bgMusic = document.querySelector("#bg-music");
+  const musicToggle = document.querySelector(".music-toggle");
   const finalScene = document.querySelector(".scene-4");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -21,6 +23,7 @@
     openingAt: 0,
     finalBloomAt: 0,
     finalBloomed: false,
+    musicOn: true,
     wheelLockedUntil: 0,
     pearls: [],
     finale: [],
@@ -36,6 +39,9 @@
       startY: 0,
     },
   };
+
+  bgMusic.volume = 0.68;
+  bgMusic.play().catch(() => {});
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
@@ -170,6 +176,7 @@
   }
 
   function advance() {
+    if (state.scene === 0) return;
     if (state.scene === 4) {
       if (!state.finalBloomed) bloomFinale();
       return;
@@ -183,6 +190,7 @@
 
   function openBud() {
     if (state.scene !== 0 || state.openingAt) return;
+    playMusic();
     state.openingAt = performance.now();
     window.setTimeout(() => setScene(1), reducedMotion ? 120 : 820);
   }
@@ -193,6 +201,34 @@
     state.finalBloomed = true;
     state.finalBloomAt = performance.now();
     finalScene.classList.add("is-bloomed");
+  }
+
+  function syncMusicButton() {
+    musicToggle.classList.toggle("is-on", state.musicOn);
+    musicToggle.classList.toggle("is-off", !state.musicOn);
+    musicToggle.setAttribute("aria-pressed", String(state.musicOn));
+    musicToggle.setAttribute("aria-label", state.musicOn ? "关闭音乐" : "打开音乐");
+  }
+
+  function playMusic() {
+    if (!state.musicOn) return;
+    bgMusic.volume = 0.68;
+    const playAttempt = bgMusic.play();
+    if (playAttempt && typeof playAttempt.catch === "function") {
+      playAttempt.catch(() => {});
+    }
+  }
+
+  function toggleMusic(event) {
+    event.stopPropagation();
+    state.musicOn = !state.musicOn;
+    syncMusicButton();
+
+    if (state.musicOn) {
+      playMusic();
+    } else {
+      bgMusic.pause();
+    }
   }
 
   function addRipple(x, y) {
@@ -740,6 +776,8 @@
     openBud();
   });
 
+  musicToggle.addEventListener("click", toggleMusic);
+
   seedButton.addEventListener("click", (event) => {
     event.stopPropagation();
     bloomFinale();
@@ -763,6 +801,7 @@
   });
 
   window.addEventListener("pointerdown", (event) => {
+    playMusic();
     state.pointer.down = true;
     state.pointer.startX = event.clientX;
     state.pointer.startY = event.clientY;
@@ -786,8 +825,8 @@
     }
 
     if (Math.abs(dy) > 44 && Math.abs(dy) > Math.abs(dx)) {
-      if (dy < 0) advance();
-      else retreat();
+      if (dy < 0 && state.scene !== 4) advance();
+      else if (state.scene !== 4 || dy > 0) retreat();
     }
   });
 
@@ -795,18 +834,25 @@
     const now = performance.now();
     if (now < state.wheelLockedUntil || Math.abs(event.deltaY) < 16) return;
     state.wheelLockedUntil = now + 850;
-    if (event.deltaY > 0) advance();
-    else retreat();
+    if (event.deltaY > 0 && state.scene !== 4) advance();
+    else if (state.scene !== 4 || event.deltaY < 0) retreat();
   }, { passive: true });
 
   window.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowDown" || event.key === "PageDown" || event.key === " ") advance();
+    playMusic();
+    if ((event.key === "ArrowDown" || event.key === "PageDown" || event.key === " ") && state.scene !== 4) advance();
     if (event.key === "ArrowUp" || event.key === "PageUp") retreat();
     if (event.key === "Enter" && state.scene === 4) bloomFinale();
   });
 
   window.addEventListener("resize", resize);
+  window.addEventListener("load", playMusic);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) playMusic();
+  });
   resize();
+  syncMusicButton();
+  playMusic();
 
   const rawParams = window.location.search.slice(1) || window.location.hash.replace(/^#/, "");
   const params = new URLSearchParams(rawParams);

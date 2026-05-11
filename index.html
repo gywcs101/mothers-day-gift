@@ -11,6 +11,14 @@
   <body>
     <main class="experience" aria-live="polite">
       <canvas id="ritual-canvas" aria-hidden="true"></canvas>
+      <audio id="bg-music" src="./所念皆星河 (钢琴版)-Jesse T.mp3" autoplay loop preload="auto"></audio>
+
+      <div class="music-control" aria-label="背景音乐">
+        <button class="music-toggle is-on" type="button" aria-label="关闭音乐" aria-pressed="true">
+          <span class="music-icon" aria-hidden="true"></span>
+        </button>
+        <span class="music-title">所念皆星河</span>
+      </div>
 
       <section class="scene scene-0 is-active" data-scene="0">
         <div class="scene-copy scene-copy--center">
@@ -20,6 +28,7 @@
         <button class="hotspot hotspot--bud" type="button" aria-label="打开这束光">
           <span></span>
         </button>
+        <p class="touch-hint">轻触开启祝福</p>
       </section>
 
       <section class="scene scene-1" data-scene="1">
